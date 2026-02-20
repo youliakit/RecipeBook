@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Cookcademy
+//  RecipeBook
 //
 //  Created by 𝒴𝑜𝓊𝓁𝒾𝒶 𝒯𝒾𝑔𝓇𝒶𝓃𝓎𝒶𝓃 on 15.02.26.
 //
@@ -17,6 +17,11 @@ struct RecipesListView: View {
 	@EnvironmentObject private var recipeData: RecipeData
 	let category: MainInformation.Category
 
+	// If something is only used internally -- mark it private!
+	@State private var isPresenting = false
+	@State private var newRecipe = Recipe()
+
+	// Colors
     private let listBackgroundColor = AppColor.background
     private let listTextColor = AppColor.foreground
     
@@ -32,6 +37,37 @@ struct RecipesListView: View {
             }
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.large)
+
+			.toolbar(content: {
+				ToolbarItem(placement: .navigationBarTrailing) {
+					Button(action: {
+						isPresenting = true
+					}, label: {
+						Image(systemName: "plus") // Default SF symbol for +
+					})
+				}
+			})
+			.sheet(isPresented: $isPresenting, content: {
+				NavigationView {
+					ModifyRecipeView(recipe: $newRecipe)
+						.toolbar(content: {
+							ToolbarItem(placement: .navigationBarTrailing) {
+								Button("Dismiss") {
+									isPresenting = false
+								}
+							}
+							ToolbarItem(placement: .navigationBarLeading) {
+								if newRecipe.isValid {
+									Button("Add") {
+										recipeData.add(recipe: newRecipe)
+										isPresenting = false
+									}
+								}
+							}
+						})
+				}
+				.navigationTitle("Add a new recipe")
+			})
         }
     }
 }

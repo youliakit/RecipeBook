@@ -1,6 +1,6 @@
 //
 //  RecipeDetalView.swift
-//  Cookcademy
+//  RecipeBook
 //
 //  Created by 𝒴𝑜𝓊𝓁𝒾𝒶 𝒯𝒾𝑔𝓇𝒶𝓃𝓎𝒶𝓃 on 17.02.26.
 //
