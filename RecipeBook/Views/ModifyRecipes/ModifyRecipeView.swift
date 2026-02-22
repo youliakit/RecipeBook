@@ -7,21 +7,42 @@
 
 import SwiftUI
 
+enum Selection {
+	case main
+	case ingredients
+	case directions
+}
+
 struct ModifyRecipeView: View {
-	// Without @Binding, changes here would not propagate back
+	/* Without @Binding, changes here would not propagate back
+	 - The binding allows ModifyRecipeView to access and modify the original property as if it owned recipe
+	 - Once ModifyRecipeView is done, it doesn’t need to send any recipe data back to RecipesListView since it was already owned by RecipesListView
+	 */
 	@Binding var recipe: Recipe // this view does not own the recipe data
-	// The binding allows ModifyRecipeView to access and modify the original property as if it owned recipe
-	// Once ModifyRecipeView is done, it doesn’t need to send any recipe data back to RecipesListView since it was already owned by RecipesListView
+
+	@State private var selection = Selection.main
+
 	var body: some View {
-		Button("Fill in the recipe with test data") {
-			recipe.mainInformation = MainInformation(
-				name: "test",
-				description: "test",
-				author: "test",
-				category: .breakfast
-			) // update the original recipe stored in the parent view
-			recipe.directions = [Direction(description: "test", isOptional: false)]
-			recipe.ingredients = [Ingredient(name: "test", quantity: 1.0, unit: .none)]
+		VStack {
+			Picker("Select recipe component", selection: $selection) {
+				Text("Main info").tag(Selection.main)
+				Text("Ingredients").tag(Selection.ingredients)
+				Text("Directions").tag(Selection.directions)
+			}
+			.pickerStyle(SegmentedPickerStyle())
+			.padding()
+
+			switch selection {
+			case .main:
+				ModifyMainInformationView(
+					mainInformation: $recipe.mainInformation
+				)
+			case .ingredients:
+				Text("Ingredients editor")
+			case .directions:
+				Text("Directions editor")
+			}
+			Spacer()
 		}
 	}
 }
