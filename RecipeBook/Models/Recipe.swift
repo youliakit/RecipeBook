@@ -79,8 +79,16 @@ struct Ingredient {
         
         var singularName: String {String(rawValue.dropLast())} // dropLast removes the last character
     }
-    
-    
+
+	init(name: String, quantity:Double, unit: Unit) {
+		self.name = name
+		self.quantity = quantity
+		self.unit = unit
+	  }
+
+	  init() {
+		self.init(name: "", quantity: 1.0, unit: .none)
+	  }
     
 }
 
