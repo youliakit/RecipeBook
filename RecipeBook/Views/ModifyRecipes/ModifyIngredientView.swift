@@ -18,7 +18,7 @@ extension NumberFormatter {
 }
 
 
-struct ModifyIngredientsView: View {
+struct ModifyComponentsView: View {
 	@Binding var ingredients: [Ingredient]
 	@State private var newIngredient = Ingredient()
 
@@ -150,7 +150,7 @@ struct ModifyIngredientsView_Preview: PreviewProvider {
 
 	static var previews: some View {
 		NavigationView {
-			ModifyIngredientsView(ingredients: $emptyIngredients)
+			ModifyComponentsView(ingredients: $emptyIngredients)
 		}
 	}
 }
