@@ -18,67 +18,18 @@ extension NumberFormatter {
 }
 
 
-struct ModifyComponentsView: View {
-	@Binding var ingredients: [Ingredient]
-	@State private var newIngredient = Ingredient()
-
-	// Colors
-	private let listBackgroundColor = AppColor.background
-	private let listTextColor = AppColor.foreground
-
-	var body: some View {
-		VStack {
-			if ingredients.isEmpty {
-				Spacer()
-				NavigationLink(
-					"Add the first ingredient",
-					destination: ModifyIngredientView(
-						ingredient: $newIngredient
-					) { ingredient in
-						ingredients.append(newIngredient)
-						newIngredient = Ingredient(
-							name: "",
-							quantity: 0.0,
-							unit: .none
-						)
-					}
-				)
-			} else {
-				List {
-					ForEach(ingredients.indices, id: \.self) { index in
-						let ingredient = ingredients[index]
-						Text(ingredient.description)
-					}
-					NavigationLink(
-						"Add another ingredient",
-						destination: ModifyIngredientView(
-							ingredient: $newIngredient
-						) { ingredient in
-							ingredients.append(newIngredient)
-						 newIngredient = Ingredient(
-							 name: "",
-							 quantity: 0.0,
-							 unit: .none
-						 )
-					 }
-					)
-					.listRowBackground(listBackgroundColor)
-					.buttonStyle(PlainButtonStyle())
-				} .listRowBackground(listBackgroundColor)
-			}
-		} .foregroundColor(listTextColor)
-	}
-
-
-}
-
-
-struct ModifyIngredientView: View {
+struct ModifyIngredientView: ModifyComponentView {
 
 	@Binding var ingredient: Ingredient // Binding, because this view gets its ingredient from a different view
 	@Environment(\.presentationMode) private var mode // dismiss View when the button is tapped
 
 	let createAction: ((Ingredient) -> Void)
+
+
+	init(component: Binding<Ingredient>, createAction: @escaping (Ingredient) -> Void) {
+		self._ingredient = component // Assign a value to the ingredient property marked with @Binding property wrapper
+		self.createAction = createAction
+	}
 
 	// Colors
 	private let listBackgroundColor = AppColor.background
@@ -131,26 +82,26 @@ struct ModifyIngredientView: View {
 
 
 struct ModifyIngredientView_Preview: PreviewProvider {
-	@State static var emptyIngredient = Ingredient()
+	@State static var emptyIngredient = Recipe.testRecipes[0].ingredients[0]
 
 	static var previews: some View {
 		NavigationView {
-			ModifyIngredientView(ingredient: $emptyIngredient) {
+			ModifyIngredientView(component: $emptyIngredient){
 				Ingredient in
 				print(Ingredient)
 			}
-		}
+		}.navigationTitle("Add Ingredient")
 	}
 }
 
 
-
-struct ModifyIngredientsView_Preview: PreviewProvider {
-	@State static var emptyIngredients = [Ingredient]()
-
+struct ModifyIngredientView_Previews: PreviewProvider {
+	@State static var recipe = Recipe.testRecipes[0]
 	static var previews: some View {
 		NavigationView {
-			ModifyComponentsView(ingredients: $emptyIngredients)
+		   ModifyIngredientView(component: $recipe.ingredients[0]) { ingredient in
+				print(ingredient)
+			}.navigationTitle("Add Ingredient")
 		}
 	}
 }

@@ -38,9 +38,13 @@ struct ModifyRecipeView: View {
 					mainInformation: $recipe.mainInformation
 				)
 			case .ingredients:
-				ModifyComponentsView(ingredients: $recipe.ingredients)
+				ModifyComponentsView<Ingredient, ModifyIngredientView>(
+					components: $recipe.ingredients
+				)
 			case .directions:
-				Text("Directions editor")
+				ModifyComponentsView<Direction, ModifyDirectionView>(
+					components: $recipe.directions
+				)
 			}
 			Spacer()
 		}

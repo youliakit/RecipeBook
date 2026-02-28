@@ -46,8 +46,8 @@ struct MainInformation {
     }
 }
 
-// Separate structs for ingredients and drections as type of [String] won't let us store additional information with each ingredient or direction
-struct Ingredient {
+// Separate structs for ingredients and directions as type of [String] won't let us store additional information with each ingredient or direction
+struct Ingredient: RecipeComponent {
     var name: String
     var quantity: Double
     var unit: Unit
@@ -92,9 +92,18 @@ struct Ingredient {
     
 }
 
-struct Direction {
-    var description: String
-    var isOptional: Bool // Adding nuts to a cookie might be optional, so this property will let us present that information to the user
+struct Direction: RecipeComponent {
+	var description: String
+	var isOptional: Bool // Adding nuts to a cookie might be optional, so this property will let us present that information to the user
+
+	init(description: String, isOptional: Bool) {
+		self.description = description
+		self.isOptional = isOptional
+	}
+
+	init(){
+		self.init(description: "", isOptional: false)
+	}
 }
 
 extension Recipe {
