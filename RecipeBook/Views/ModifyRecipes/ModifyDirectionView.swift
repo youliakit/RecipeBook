@@ -10,17 +10,17 @@ import SwiftUI
 struct ModifyDirectionView: ModifyComponentView {
 	@Binding var direction: Direction // Using @Binding to edit Direction inside of Recipe structure, without it we would edit the copy
 	let createAction: (Direction) -> Void // allows parent(Recipe model) to decide what 'Save' means
-
+	
 	private let listBackgroundColor = AppColor.background
 	private let listTextColor = AppColor.foreground
-
+	
 	init(component: Binding<Direction>, createAction: @escaping (Direction) -> Void) {
 		self._direction = component
 		self.createAction = createAction
 	}
-
+	
 	@Environment(\.presentationMode) private var mode // gives access to the sheet's presentation state
-
+	
 	var body: some View {
 		Form {
 			TextField("Direction Description", text: $direction.description) // direction is Binding<Direction>, but SwiftUI supports dynamic member lookup so we do $direction.description and it becomes Binding<String>
@@ -42,7 +42,7 @@ struct ModifyDirectionView: ModifyComponentView {
 
 struct ModifyDirectionView_Previews: PreviewProvider {
 	@State static var emptyDirection = Direction(description: "", isOptional: false)  // changed to new empty initializer
-
+	
 	static var previews: some View {
 		NavigationView { ModifyDirectionView(component: $emptyDirection) {
 			_ in return

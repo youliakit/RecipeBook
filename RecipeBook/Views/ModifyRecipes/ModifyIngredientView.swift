@@ -19,22 +19,22 @@ extension NumberFormatter {
 
 
 struct ModifyIngredientView: ModifyComponentView {
-
+	
 	@Binding var ingredient: Ingredient // Binding, because this view gets its ingredient from a different view
 	@Environment(\.presentationMode) private var mode // dismiss View when the button is tapped
-
+	
 	let createAction: ((Ingredient) -> Void)
-
-
+	
+	
 	init(component: Binding<Ingredient>, createAction: @escaping (Ingredient) -> Void) {
 		self._ingredient = component // Assign a value to the ingredient property marked with @Binding property wrapper
 		self.createAction = createAction
 	}
-
+	
 	// Colors
 	private let listBackgroundColor = AppColor.background
 	private let listTextColor = AppColor.foreground
-
+	
 	var body: some View {
 		VStack {
 			Form {
@@ -52,10 +52,10 @@ struct ModifyIngredientView: ModifyComponentView {
 					}
 				} .listRowBackground(listBackgroundColor)
 				Picker(selection: $ingredient.unit, label:
-					HStack {
-						Text("Unit")
-						Spacer()
-						Text(ingredient.unit.rawValue)
+						HStack {
+					Text("Unit")
+					Spacer()
+					Text(ingredient.unit.rawValue)
 				}) {
 					ForEach(Ingredient.Unit.allCases, id: \.self) { unit in
 						Text(unit.rawValue)
@@ -63,7 +63,7 @@ struct ModifyIngredientView: ModifyComponentView {
 				}
 				.listRowBackground(listBackgroundColor)
 				.pickerStyle(MenuPickerStyle())
-
+				
 				HStack {
 					Spacer()
 					Button("Save") {
@@ -83,7 +83,7 @@ struct ModifyIngredientView: ModifyComponentView {
 
 struct ModifyIngredientView_Preview: PreviewProvider {
 	@State static var emptyIngredient = Recipe.testRecipes[0].ingredients[0]
-
+	
 	static var previews: some View {
 		NavigationView {
 			ModifyIngredientView(component: $emptyIngredient){
@@ -99,7 +99,7 @@ struct ModifyIngredientView_Previews: PreviewProvider {
 	@State static var recipe = Recipe.testRecipes[0]
 	static var previews: some View {
 		NavigationView {
-		   ModifyIngredientView(component: $recipe.ingredients[0]) { ingredient in
+			ModifyIngredientView(component: $recipe.ingredients[0]) { ingredient in
 				print(ingredient)
 			}.navigationTitle("Add Ingredient")
 		}

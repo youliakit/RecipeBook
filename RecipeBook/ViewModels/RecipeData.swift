@@ -9,21 +9,31 @@ import Foundation
 import Combine
 
 class RecipeData: ObservableObject {
-  @Published var recipes = Recipe.testRecipes
-
-  func recipes(for category: MainInformation.Category) -> [Recipe] {
-	var filteredRecipes = [Recipe]()
-	for recipe in recipes {
-	  if recipe.mainInformation.category == category {
-		filteredRecipes.append(recipe)
-	  }
+	@Published var recipes = Recipe.testRecipes
+	
+	func recipes(for category: MainInformation.Category) -> [Recipe] {
+		var filteredRecipes = [Recipe]()
+		for recipe in recipes {
+			if recipe.mainInformation.category == category {
+				filteredRecipes.append(recipe)
+			}
+		}
+		return filteredRecipes
 	}
-	  return filteredRecipes
-  }
-
+	
 	func add(recipe: Recipe) {
 		if recipe.isValid {
 			recipes.append(recipe)
 		}
+	}
+	
+	// Returns the index of a given recipe
+	func index(of recipe: Recipe) -> Int? {
+		for i in recipes.indices {
+			if recipes[i].id == recipe.id {
+				return i
+			}
+		}
+		return nil
 	}
 }

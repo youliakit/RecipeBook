@@ -57,28 +57,43 @@ struct ModifyComponentsView<Component: RecipeComponent, DestinationView: ModifyC
 				)
 				Spacer()
 			}
-				else {
-					HStack {
-						Text("Components")
-							.font(.title)
-							.padding()
-						Spacer()
+			else {
+				HStack {
+					Text("Components")
+						.font(.title)
+						.padding()
+					Spacer()
 				}
-					List {
-						ForEach(components.indices, id: \.self) {
-							index in
-							let component = components[index]
-							Text(component.description)
+				List {
+					ForEach(components.indices, id: \.self) {
+						index in
+						let component = components[index]
+						let editComponentView = DestinationView(component: $components[index]) {
+							_ in return
 						}
-						.listRowBackground(listBackgroundColor)
+							.navigationTitle(
+								"Edit \(Component.singularName().capitalized)"
+							)
 						NavigationLink(
-							"Add another \(Component.singularName())",
-							destination: addComponentView
+							component.description,
+							destination: editComponentView
 						)
-						.buttonStyle(PlainButtonStyle())
-						.listRowBackground(listBackgroundColor)
 					}
-					.foregroundColor(listTextColor)
+					.onDelete { components.remove(atOffsets: $0) }
+					.onMove { indices, newOffset in
+						components
+							.move(fromOffsets: indices, toOffset: newOffset)
+					}
+
+					.listRowBackground(listBackgroundColor)
+					NavigationLink(
+						"Add another \(Component.singularName())",
+						destination: addComponentView
+					)
+					.buttonStyle(PlainButtonStyle())
+					.listRowBackground(listBackgroundColor)
+				}
+				.foregroundColor(listTextColor)
 			}
 		}
 	}

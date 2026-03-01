@@ -11,7 +11,7 @@ import SwiftUI
 // Making CategoryView organized and reusable
 struct CategoryView: View {
 	let category: MainInformation.Category
-
+	
 	var body: some View {
 		ZStack {
 			Image(category.rawValue.lowercased())
@@ -22,39 +22,39 @@ struct CategoryView: View {
 				.font(.title)
 		}
 	}
-
+	
 }
 
 struct RecipeCategoryGridView: View {
-  @StateObject private var recipeData = RecipeData() // maintains the state of recipeData and passes recipeData as an Environment object to the other views
-  var body: some View {
-	  let columns = [GridItem(), GridItem()]
-	  NavigationView {
-		  ScrollView {
-			  LazyVGrid(
-columns: columns,
- content: {
-				  ForEach(MainInformation.Category.allCases,
-						  id: \.self) { category in
-					  NavigationLink(
-						destination: RecipesListView(category: category)
-							.environmentObject(recipeData),
-						label: {
-							CategoryView(category: category) // CategoryView is initiated for every category within ForEach
+	@StateObject private var recipeData = RecipeData() // maintains the state of recipeData and passes recipeData as an Environment object to the other views
+	var body: some View {
+		let columns = [GridItem(), GridItem()]
+		NavigationView {
+			ScrollView {
+				LazyVGrid(
+					columns: columns,
+					content: {
+						ForEach(MainInformation.Category.allCases,
+								id: \.self) { category in
+							NavigationLink(
+								destination: RecipesListView(category: category)
+									.environmentObject(recipeData),
+								label: {
+									CategoryView(category: category) // CategoryView is initiated for every category within ForEach
+								}
+							)
 						}
-					  )
-				  }
-			  })
-			  .navigationTitle("Categories")
-		  }
-	  }
-  }
+					})
+				.navigationTitle("Categories")
+			}
+		}
+	}
 }
 
 
 struct RecipeCategoryGridView_Previews: PreviewProvider {
-  static var previews: some View {
-	RecipeCategoryGridView()
-  }
+	static var previews: some View {
+		RecipeCategoryGridView()
+	}
 }
 

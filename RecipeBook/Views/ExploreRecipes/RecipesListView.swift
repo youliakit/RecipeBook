@@ -16,28 +16,31 @@ struct RecipesListView: View {
 	 */
 	@EnvironmentObject private var recipeData: RecipeData
 	let category: MainInformation.Category
-
+	
 	// If something is only used internally -- mark it private!
 	@State private var isPresenting = false
 	@State private var newRecipe = Recipe()
-
+	
 	// Colors
-    private let listBackgroundColor = AppColor.background
-    private let listTextColor = AppColor.foreground
-    
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(recipes) {
-                    recipe in
-                    NavigationLink(recipe.mainInformation.name, destination: RecipeDetailView(recipe: recipe))
-                }
-                .listRowBackground(listBackgroundColor)
-                .foregroundColor(listTextColor)
-            }
-            .navigationTitle(navigationTitle)
-            .navigationBarTitleDisplayMode(.large)
-
+	private let listBackgroundColor = AppColor.background
+	private let listTextColor = AppColor.foreground
+	
+	var body: some View {
+		NavigationView {
+			List {
+				ForEach(recipes) {
+					recipe in
+					NavigationLink(
+						recipe.mainInformation.name,
+						destination: RecipeDetailView(recipe: binding(for: recipe))
+					)
+				}
+				.listRowBackground(listBackgroundColor)
+				.foregroundColor(listTextColor)
+			}
+			.navigationTitle(navigationTitle)
+			.navigationBarTitleDisplayMode(.large)
+			
 			.toolbar(content: {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					Button(action: {
@@ -68,29 +71,37 @@ struct RecipesListView: View {
 				}
 				.navigationTitle("Add a new recipe")
 			})
-        }
-    }
+		}
+	}
 }
 
 extension RecipesListView {
 	/*
 	 The new category property is the Category to display that the grid will pass in. The new function, recipes(for:), was created to filter recipes by category. Then, the recipes property calls this function to return the recipes filtered by the category.
 	 */
-    private var recipes: [Recipe] {
+	private var recipes: [Recipe] {
 		recipeData.recipes(for: category)
-    }
-
-    // Title includes the specific category
-    private var navigationTitle: String {
+	}
+	
+	// Title includes the specific category
+	private var navigationTitle: String {
 		"\(category.rawValue) Recipes"
-    }
+	}
+	
+	// Returns binding of found recipe
+	func binding(for recipe: Recipe) -> Binding<Recipe> {
+		guard let index = recipeData.index(of: recipe) else {
+			fatalError("Failed to find recipe!")
+		}
+		return $recipeData.recipes[index]
+	}
 }
 
 struct RecipesListView_Previews: PreviewProvider {
-  static var previews: some View {
-	NavigationView {
-	  RecipesListView(category: .breakfast)
-		.environmentObject(RecipeData())
+	static var previews: some View {
+		NavigationView {
+			RecipesListView(category: .breakfast)
+				.environmentObject(RecipeData())
+		}
 	}
-  }
 }
