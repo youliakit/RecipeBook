@@ -10,7 +10,12 @@ import Combine
 
 class RecipeData: ObservableObject {
 	@Published var recipes = Recipe.testRecipes
-	
+
+	// computed property to filter recipes by their isFavourite property
+	var favouriteRecipes: [Recipe] {
+		recipes.filter { $0.isFavourite }
+	}
+
 	func recipes(for category: MainInformation.Category) -> [Recipe] {
 		var filteredRecipes = [Recipe]()
 		for recipe in recipes {

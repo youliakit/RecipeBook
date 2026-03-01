@@ -15,16 +15,16 @@ struct RecipesListView: View {
 	 Since RecipesListView will be a child view, RecipesListView will access that data through the environment using the @EnvironmentObject property wrapper
 	 */
 	@EnvironmentObject private var recipeData: RecipeData
-	let category: MainInformation.Category
-	
+	let viewStyle: ViewStyle
+
 	// If something is only used internally -- mark it private!
 	@State private var isPresenting = false
 	@State private var newRecipe = Recipe()
-	
+
 	// Colors
 	private let listBackgroundColor = AppColor.background
 	private let listTextColor = AppColor.foreground
-	
+
 	var body: some View {
 		NavigationView {
 			List {
@@ -40,10 +40,12 @@ struct RecipesListView: View {
 			}
 			.navigationTitle(navigationTitle)
 			.navigationBarTitleDisplayMode(.large)
-			
+
 			.toolbar(content: {
 				ToolbarItem(placement: .navigationBarTrailing) {
 					Button(action: {
+						newRecipe = Recipe()
+						newRecipe.mainInformation.category = recipes.first?.mainInformation.category ?? .breakfast
 						isPresenting = true
 					}, label: {
 						Image(systemName: "plus") // Default SF symbol for +
@@ -62,6 +64,10 @@ struct RecipesListView: View {
 							ToolbarItem(placement: .navigationBarLeading) {
 								if newRecipe.isValid {
 									Button("Add") {
+										//  set a recipe’s isFavorite property to true when it’s being created from a recipe list view with a viewStyle of .favorites
+										if case .favourites = viewStyle {
+											newRecipe.isFavourite = true
+										}
 										recipeData.add(recipe: newRecipe)
 										isPresenting = false
 									}
@@ -76,18 +82,37 @@ struct RecipesListView: View {
 }
 
 extension RecipesListView {
+
+	enum ViewStyle {
+		case favourites
+		case singleCategory(MainInformation.Category)
+	}
+
 	/*
 	 The new category property is the Category to display that the grid will pass in. The new function, recipes(for:), was created to filter recipes by category. Then, the recipes property calls this function to return the recipes filtered by the category.
 	 */
 	private var recipes: [Recipe] {
-		recipeData.recipes(for: category)
+
+		switch viewStyle {
+		case let .singleCategory(category):
+			return recipeData.recipes(for: category)
+		case .favourites:
+			return recipeData.favouriteRecipes
+
+		}
+
 	}
-	
+
 	// Title includes the specific category
 	private var navigationTitle: String {
-		"\(category.rawValue) Recipes"
+		switch viewStyle {
+		case let .singleCategory(category):
+			return "\(category.rawValue) Recipes"
+		case .favourites:
+			return "Favourite Recipes"
+		}
 	}
-	
+
 	// Returns binding of found recipe
 	func binding(for recipe: Recipe) -> Binding<Recipe> {
 		guard let index = recipeData.index(of: recipe) else {
@@ -100,7 +125,7 @@ extension RecipesListView {
 struct RecipesListView_Previews: PreviewProvider {
 	static var previews: some View {
 		NavigationView {
-			RecipesListView(category: .breakfast)
+			RecipesListView(viewStyle: .singleCategory(.breakfast))
 				.environmentObject(RecipeData())
 		}
 	}

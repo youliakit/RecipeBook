@@ -26,7 +26,7 @@ struct CategoryView: View {
 }
 
 struct RecipeCategoryGridView: View {
-	@StateObject private var recipeData = RecipeData() // maintains the state of recipeData and passes recipeData as an Environment object to the other views
+	@EnvironmentObject private var recipeData: RecipeData
 	var body: some View {
 		let columns = [GridItem(), GridItem()]
 		NavigationView {
@@ -37,8 +37,9 @@ struct RecipeCategoryGridView: View {
 						ForEach(MainInformation.Category.allCases,
 								id: \.self) { category in
 							NavigationLink(
-								destination: RecipesListView(category: category)
-									.environmentObject(recipeData),
+								destination: RecipesListView(
+									viewStyle: .singleCategory(category)
+								),
 								label: {
 									CategoryView(category: category) // CategoryView is initiated for every category within ForEach
 								}

@@ -62,6 +62,11 @@ struct RecipeDetailView: View {
 						Button("📝") {
 							isPresenting = true
 						}
+						Button(action: {
+							recipe.isFavourite.toggle()
+						}) {
+							Text(recipe.isFavourite ? "❤️" : "🩶")
+						}
 					}
 				}
 			}
