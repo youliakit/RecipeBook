@@ -39,8 +39,8 @@ struct ModifyComponentsView<Component: RecipeComponent, DestinationView: ModifyC
 	@Binding var components: [Component]
 	@State private var newComponent = Component()
 
-	private let listBackgroundColour = AppColour.background
-	private let listTextColour = AppColour.foreground
+	@AppStorage("listBackgroundColour") private var listBackgroundColour = AppColour.background
+	@AppStorage("listTextColour") private var listTextColour = AppColour.foreground
 
 	var body: some View {
 		VStack {

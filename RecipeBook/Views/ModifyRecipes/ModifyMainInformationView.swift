@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ModifyMainInformationView: View {
-	private let listBackgroundColour = AppColour.background
-	private let listTextColour = AppColour.foreground
+	@AppStorage("listBackgroundColour") private var listBackgroundColour = AppColour.background
+	@AppStorage("listTextColour") private var listTextColour = AppColour.foreground
 
 	@Binding var mainInformation: MainInformation
 	

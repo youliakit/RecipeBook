@@ -8,7 +8,7 @@
 import SwiftUI // Allows the Color structure to be referenced
 import Foundation
 
-struct AppColor {
+struct AppColour {
 	static let background: Color = Color(.sRGB,
 										 red: 255/255,
 										 green: 233/255,
@@ -24,7 +24,7 @@ struct AppColor {
 /*
  To wrap a property with the @AppStorage property wrapper, the type must already be supported by the @AppStorage property wrapper, or conform to RawRepresentable. Color is not by default supported by the @AppStorage property wrapper, so you need to add conformance to RawRepresentable.
  */
-extension Color: RawRepresentable {
+extension Color: @retroactive RawRepresentable {
 	// rawValue property converts Color into a String
 	public init?(rawValue: String) {
 		do {

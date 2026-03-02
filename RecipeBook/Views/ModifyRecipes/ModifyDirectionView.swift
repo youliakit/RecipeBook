@@ -11,8 +11,8 @@ struct ModifyDirectionView: ModifyComponentView {
 	@Binding var direction: Direction // Using @Binding to edit Direction inside of Recipe structure, without it we would edit the copy
 	let createAction: (Direction) -> Void // allows parent(Recipe model) to decide what 'Save' means
 	
-	private let listBackgroundColour = AppColour.background
-	private let listTextColour = AppColour.foreground
+	@AppStorage("listBackgroundColour") private var listBackgroundColour = AppColour.background
+	@AppStorage("listTextColour") private var listTextColour = AppColour.foreground
 
 	init(component: Binding<Direction>, createAction: @escaping (Direction) -> Void) {
 		self._direction = component

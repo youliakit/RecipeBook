@@ -12,9 +12,10 @@ struct RecipeDetailView: View {
 	@Binding var recipe: Recipe
 	
 	@State private var isPresenting = false // track when ModifyRecipeView sheet should be presented
-	
-	private let listBackgroudColour = AppColour.background
-	private let listTextColour = AppColor.foreground
+
+	@AppStorage("hideOptionalSteps") private var hideOptionalSteps: Bool = false
+	@AppStorage("listBackgroudColour") private var listBackgroudColour = AppColour.background
+	@AppStorage("listTextColour") private var listTextColour = AppColour.foreground
 
 	var body: some View {
 		NavigationView {
@@ -44,12 +45,21 @@ struct RecipeDetailView: View {
 						ForEach(recipe.directions.indices, id: \.self) {
 							index in
 							let direction = recipe.directions[index]
-							HStack {
-								Text("\(index + 1). ").bold()
-								Text("\(direction.isOptional ? "(Optional)" : "")" + "\(direction.description)")
-							}.foregroundColor(listTextColor)
+							// Hide optional steps based on user selection
+							if direction.isOptional && hideOptionalSteps {
+								EmptyView()
+							} else {
+								HStack {
+									let index = recipe.index(
+										of: direction,
+										excludingOptionalDirections: hideOptionalSteps
+									) ?? 0
+									Text("\(index + 1). ").bold()
+									Text("\(direction.isOptional ? "(Optional)" : "")" + "\(direction.description)")
+								}.foregroundColor(listTextColour)
+							}
 						}
-					}.listRowBackground(listBackgroudColor)
+					}.listRowBackground(listBackgroudColour)
 				}
 			}
 			.navigationTitle(recipe.mainInformation.name)

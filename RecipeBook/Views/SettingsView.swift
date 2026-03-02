@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct SettingsView: View {
-	@State private var hideOptionalSteps: Bool = false
-
-	@AppStorage("listBackgroundColor") private var listBackgroundColor = AppColour.background
-	@AppStorage("listTextColor") private var listTextColor = AppColour.foreground
+	@AppStorage("hideOptionalSteps") private var hideOptionalSteps: Bool = false
+	@AppStorage("listBackgroundColor") private var listBackgroundColour = AppColour.background
+	@AppStorage("listTextColor") private var listTextColour = AppColour.foreground
 
 	var body: some View {
 		NavigationView {
@@ -22,9 +21,9 @@ struct SettingsView: View {
 				)
 				.padding()
 				.listRowBackground(listBackgroundColour)
-				ColorPicker("Text colour", selection: $listTextColor)
+				ColorPicker("Text colour", selection: $listTextColour)
 					.padding()
-					.listRowBackground(listBackgroundColor)
+					.listRowBackground(listBackgroundColour)
 				Toggle("Hide optional steps", isOn: $hideOptionalSteps)
 					.padding()
 					.listRowBackground(listBackgroundColour)
