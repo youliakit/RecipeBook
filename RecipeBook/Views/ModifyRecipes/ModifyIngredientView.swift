@@ -31,15 +31,15 @@ struct ModifyIngredientView: ModifyComponentView {
 		self.createAction = createAction
 	}
 	
-	// Colors
-	private let listBackgroundColor = AppColor.background
-	private let listTextColor = AppColor.foreground
-	
+	// Colours
+	private let listBackgroundColour = AppColour.background
+	private let listTextColour = AppColour.foreground
+
 	var body: some View {
 		VStack {
 			Form {
 				TextField("Ingredient name", text: $ingredient.name)
-					.listRowBackground(listBackgroundColor)
+					.listRowBackground(listBackgroundColour)
 				Stepper(value: $ingredient.quantity, in: 0...100, step: 0.5) {
 					HStack {
 						Text("Quantity:")
@@ -50,7 +50,7 @@ struct ModifyIngredientView: ModifyComponentView {
 						).keyboardType(.numbersAndPunctuation)
 						// The value of quantity can be changed either by typing in a number directly or by using the stepper -/+
 					}
-				} .listRowBackground(listBackgroundColor)
+				} .listRowBackground(listBackgroundColour)
 				Picker(selection: $ingredient.unit, label:
 						HStack {
 					Text("Unit")
@@ -61,7 +61,7 @@ struct ModifyIngredientView: ModifyComponentView {
 						Text(unit.rawValue)
 					}
 				}
-				.listRowBackground(listBackgroundColor)
+				.listRowBackground(listBackgroundColour)
 				.pickerStyle(MenuPickerStyle())
 				
 				HStack {
@@ -71,9 +71,9 @@ struct ModifyIngredientView: ModifyComponentView {
 						mode.wrappedValue.dismiss()
 					}
 					Spacer()
-				} .listRowBackground(listBackgroundColor)
+				} .listRowBackground(listBackgroundColour)
 			}
-			.foregroundColor(listTextColor)
+			.foregroundColor(listTextColour)
 		}
 	}
 }

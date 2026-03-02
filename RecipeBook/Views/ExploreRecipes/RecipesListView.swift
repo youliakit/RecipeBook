@@ -21,9 +21,9 @@ struct RecipesListView: View {
 	@State private var isPresenting = false
 	@State private var newRecipe = Recipe()
 
-	// Colors
-	private let listBackgroundColor = AppColor.background
-	private let listTextColor = AppColor.foreground
+	// Colours
+	private let listBackgroundColour = AppColour.background
+	private let listTextColour = AppColour.foreground
 
 	var body: some View {
 		NavigationView {
@@ -35,8 +35,8 @@ struct RecipesListView: View {
 						destination: RecipeDetailView(recipe: binding(for: recipe))
 					)
 				}
-				.listRowBackground(listBackgroundColor)
-				.foregroundColor(listTextColor)
+				.listRowBackground(listBackgroundColour)
+				.foregroundColor(listTextColour)
 			}
 			.navigationTitle(navigationTitle)
 			.navigationBarTitleDisplayMode(.large)

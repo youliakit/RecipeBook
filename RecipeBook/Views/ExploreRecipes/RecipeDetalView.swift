@@ -13,9 +13,9 @@ struct RecipeDetailView: View {
 	
 	@State private var isPresenting = false // track when ModifyRecipeView sheet should be presented
 	
-	private let listBackgroudColor = AppColor.background
-	private let listTextColor = AppColor.foreground
-	
+	private let listBackgroudColour = AppColour.background
+	private let listTextColour = AppColor.foreground
+
 	var body: some View {
 		NavigationView {
 			VStack {
@@ -37,9 +37,9 @@ struct RecipeDetailView: View {
 							index in
 							let ingredient = recipe.ingredients[index]
 							Text(ingredient.description)
-								.foregroundColor(listTextColor)
+								.foregroundColor(listTextColour)
 						}
-					}.listRowBackground(listBackgroudColor)
+					}.listRowBackground(listBackgroudColour)
 					Section(header: Text("Directions")) {
 						ForEach(recipe.directions.indices, id: \.self) {
 							index in

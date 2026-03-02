@@ -11,9 +11,9 @@ struct ModifyDirectionView: ModifyComponentView {
 	@Binding var direction: Direction // Using @Binding to edit Direction inside of Recipe structure, without it we would edit the copy
 	let createAction: (Direction) -> Void // allows parent(Recipe model) to decide what 'Save' means
 	
-	private let listBackgroundColor = AppColor.background
-	private let listTextColor = AppColor.foreground
-	
+	private let listBackgroundColour = AppColour.background
+	private let listTextColour = AppColour.foreground
+
 	init(component: Binding<Direction>, createAction: @escaping (Direction) -> Void) {
 		self._direction = component
 		self.createAction = createAction
@@ -24,9 +24,9 @@ struct ModifyDirectionView: ModifyComponentView {
 	var body: some View {
 		Form {
 			TextField("Direction Description", text: $direction.description) // direction is Binding<Direction>, but SwiftUI supports dynamic member lookup so we do $direction.description and it becomes Binding<String>
-				.listRowBackground(listBackgroundColor)
+				.listRowBackground(listBackgroundColour)
 			Toggle("Optional", isOn: $direction.isOptional)
-				.listRowBackground(listBackgroundColor)
+				.listRowBackground(listBackgroundColour)
 			HStack {
 				Spacer()
 				Button("Save") {
@@ -34,9 +34,9 @@ struct ModifyDirectionView: ModifyComponentView {
 					mode.wrappedValue.dismiss() // telling SwiftUI to close this sheet
 				}
 				Spacer()
-			}.listRowBackground(listBackgroundColor)
+			}.listRowBackground(listBackgroundColour)
 		}
-		.foregroundColor(listTextColor)
+		.foregroundColor(listTextColour)
 	}
 }
 
