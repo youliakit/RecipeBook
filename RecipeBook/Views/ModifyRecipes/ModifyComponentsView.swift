@@ -10,7 +10,7 @@ import SwiftUI
 
 // RecipeComponent protocol is the blueprint that Ingredient and Direction conform to
 // Ensure that any conforming structures have a description property using CustomStringConvertible
-protocol RecipeComponent: CustomStringConvertible {
+protocol RecipeComponent: Codable, CustomStringConvertible {
 	init()
 
 	static func singularName() -> String

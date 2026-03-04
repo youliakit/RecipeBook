@@ -4,7 +4,7 @@
 import Foundation
 
 // Main structure of recipe
-struct Recipe: Identifiable {
+struct Recipe: Codable, Identifiable {
 	var id = UUID()
 	var mainInformation: MainInformation
 	var ingredients: [Ingredient]
@@ -14,6 +14,16 @@ struct Recipe: Identifiable {
 	// Ensure that the recipe's key components are not empty
 	var isValid: Bool {
 		mainInformation.isValid && !ingredients.isEmpty && !directions.isEmpty
+	}
+
+	init(mainInformation: MainInformation, ingredients: [Ingredient], directions: [Direction]) {
+		self.mainInformation = mainInformation
+		self.ingredients = ingredients
+		self.directions = directions
+	}
+
+	init() {
+		self.init(mainInformation: MainInformation(name: "", description: "", author: "", category: .dessert), ingredients: [], directions: [])
 	}
 
 	// Return correct display index
@@ -26,20 +36,10 @@ struct Recipe: Identifiable {
 		let index = directions.firstIndex { $0.description == direction.description }
 		return index
 	  }
-
-	init(mainInformation: MainInformation, ingredients: [Ingredient], directions: [Direction]) {
-		self.mainInformation = mainInformation
-		self.ingredients = ingredients
-		self.directions = directions
-	}
-
-	init() {
-		self.init(mainInformation: MainInformation(name: "", description: "", author: "", category: .dessert), ingredients: [], directions: [])
-	}
 }
 
 // Main information for single recipe
-struct MainInformation {
+struct MainInformation: Codable {
 	var name: String
 	var description: String
 	var author: String
@@ -50,7 +50,7 @@ struct MainInformation {
 	}
 
 	// Enumeration that holds all the possible categories with String raw values
-	enum Category: String, CaseIterable {
+	enum Category: String, CaseIterable, Codable {
 		case breakfast = "Breakfast"
 		case lunch = "Lunch"
 		case dinner = "Dinner"
@@ -82,7 +82,7 @@ struct Ingredient: RecipeComponent {
 	}
 
 
-	enum Unit: String, CaseIterable {
+	enum Unit: String, CaseIterable, Codable {
 		case oz = "Ounces"
 		case g = "Grams"
 		case cups = "Cups"

@@ -10,7 +10,8 @@ import SwiftUI
 
 struct RecipeDetailView: View {
 	@Binding var recipe: Recipe
-	
+	@Binding var recipeData: RecipeData
+
 	@State private var isPresenting = false // track when ModifyRecipeView sheet should be presented
 
 	@AppStorage("hideOptionalSteps") private var hideOptionalSteps: Bool = false
@@ -94,6 +95,10 @@ struct RecipeDetailView: View {
 						}
 						.navigationTitle("Edit recipe")
 				}
+				// if recipe is modified, the modification will persist
+				.onDisappear {
+					recipeData.saveRecipes()
+				}
 			}
 		}
 	}
@@ -101,9 +106,11 @@ struct RecipeDetailView: View {
 
 struct RecipeDetailView_Previews: PreviewProvider {
 	@State static var recipe = Recipe.testRecipes[0]
+	@State static var recipeData = RecipeData()
+	
 	static var previews: some View {
 		NavigationView {
-			RecipeDetailView(recipe: $recipe)
+			RecipeDetailView(recipe: $recipe, recipeData: $recipeData)
 		}
 	}
 }
